@@ -1,0 +1,38 @@
+
+SCHEMA >
+    `timestamp` DateTime,
+    `project_id` String,
+    `deployment_id` String,
+    `vercel_id_regions` String,
+    `request_id` String,
+    `environment` LowCardinality(String),
+    `path_type` LowCardinality(String),
+    `request_hostname` String,
+    `request_method` LowCardinality(String),
+    `request_path` String,
+    `request_extension` LowCardinality(String),
+    `source_path` String,
+    `route` String,
+    `http_status` Int16,
+    `error_code` LowCardinality(String),
+    `serverless_region` LowCardinality(String),
+    `edge_region` LowCardinality(String),
+    `cache` LowCardinality(String),
+    `hit_state` LowCardinality(String),
+    `hit_level` LowCardinality(String),
+    `client_ip` String,
+    `client_user_agent` String,
+    `referrer_url` String,
+    `referrer_hostname` String,
+    `asn` LowCardinality(String),
+    `waf_action` LowCardinality(String),
+    `bot_name` LowCardinality(String),
+    `request_bytes` Int32,
+    `response_body_bytes` Int32,
+    `provisioned_memory_bytes` Int64,
+    `duration_us` Int32
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toDate(timestamp)"
+ENGINE_SORTING_KEY "project_id, toStartOfTenMinutes(timestamp), http_status, request_hostname, route, request_path"
+ENGINE_TTL "timestamp + toIntervalDay(90)"
